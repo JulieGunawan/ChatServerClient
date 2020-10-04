@@ -38,9 +38,13 @@ public class AppDriver {
 					ClientConnection cc1 = waitingClients.get(0);
 					ClientConnection cc2 = waitingClients.get(1);
 					
-					ChatHandler chatHandler = new ChatHandler(cc1, cc2);
-					Thread thread = new Thread(chatHandler);
+					ChatHandler chatHandler1 = new ChatHandler(cc1, cc2);
+					Thread thread = new Thread(chatHandler1);
 					thread.start();
+					
+					ChatHandler chatHandler2 = new ChatHandler(cc2, cc1);
+					Thread thread2 = new Thread(chatHandler2);
+					thread2.start();
 					
 					waitingClients.remove(cc1);
 					waitingClients.remove(cc2);

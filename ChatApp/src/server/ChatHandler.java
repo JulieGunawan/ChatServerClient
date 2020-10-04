@@ -44,9 +44,9 @@ public class ChatHandler implements Runnable {
 				else			
 					this.oos.writeObject(send);*/
 				
-				Message received=(Message)this.cc2.getObjectInputStream().readObject();
-				System.out.println("Received message: "+received.toString());
-				this.cc1.getObjectOutputStream().writeObject(received);
+				//Message received=(Message)this.cc2.getObjectInputStream().readObject();
+				//System.out.println("Received message: "+received.toString());
+				//this.cc1.getObjectOutputStream().writeObject(received);
 				
 				
 			}	
