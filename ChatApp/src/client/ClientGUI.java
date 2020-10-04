@@ -19,7 +19,7 @@ import problemdomain.Message;
 
 /**
  * @author 751682
- *1:33:23
+ *
  */
 public class ClientGUI {
 	
@@ -32,12 +32,16 @@ public class ClientGUI {
 	private Socket socket;
 	private DefaultListModel chatListModel;
 	
+	private final static int WIDTH=10;
+	private final static int LENGTH=10;
+	
+	
 	public ClientGUI() {
 		this.frame = new JFrame("Chat App");
 		
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setLayout(new BorderLayout());
-		this.frame.setSize(400, 400);
+		this.frame.setSize(800, 800);
 		
 		JPanel gamepanel = this.createGamePanel();
 		this.frame.add(gamepanel, BorderLayout.NORTH);
@@ -57,16 +61,21 @@ public class ClientGUI {
 	}*/
 	
 	private JPanel createGamePanel() {
-		JPanel boardGame = new JPanel(new BorderLayout());
+		JPanel boardGame = new JPanel(new BorderLayout(20,20));
 		
 		JLabel player1Label = new JLabel("Player 1");
-		JPanel player1Board = new JPanel(new BorderLayout());
+		JPanel player1Board = new JPanel(new BorderLayout(10,10));
+		JPanel player1Battleship = this.createBoardPanel(WIDTH, LENGTH);
 		
-		player1Board.add(player1Label);
+		player1Board.add(player1Label, BorderLayout.NORTH);
+		player1Board.add(player1Battleship, BorderLayout.CENTER);
 		
 		JLabel player2Label = new JLabel ("Player 2");
-		JPanel player2Board = new JPanel(new BorderLayout());
-	    player2Board.add(player2Label);
+		JPanel player2Board = new JPanel(new BorderLayout(10,10));
+		JPanel player2Battleship = this.createBoardPanel(WIDTH, LENGTH);
+		
+	    player2Board.add(player2Label, BorderLayout.NORTH);
+		player2Board.add(player2Battleship, BorderLayout.CENTER);
 		
 		boardGame.add(player1Board, BorderLayout.NORTH);
 		boardGame.add(player2Board, BorderLayout.CENTER);
@@ -74,6 +83,19 @@ public class ClientGUI {
 		return boardGame;
 	}
 	
+	private JPanel createBoardPanel(int width, int length) {
+		JPanel battleshipBoard = new JPanel(new GridLayout(width, length));
+		JButton [][] grid = new JButton[width][length];
+		
+		for (int i=0; i<length; i++) {
+			for(int j=0; j<width; j++) {
+				grid[i][j] = new JButton("("+(i+1)+","+(j+1)+")");
+				battleshipBoard.add(grid[i][j]);
+			}
+		}
+				
+		return battleshipBoard;
+	}
 		
 	private JPanel createChatPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
