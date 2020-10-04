@@ -7,14 +7,18 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
-import problemdomain.Message;
+
+import problemdomain.*;
 
 public class AppDriver {
 	public static void main (String[] args) throws IOException {
 		ServerSocket listener = new ServerSocket(1234);
 		
 		System.out.println("Waiting for connecting port 1234...");
+		
+		ArrayList<ClientConnection> waitingClients = new ArrayList<ClientConnection>();
 		
 		while (listener.isBound()) {
 			try {
@@ -27,32 +31,26 @@ public class AppDriver {
 				OutputStream outputStream = client.getOutputStream();
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 					
-				System.out.println("Waiting for messages ...");
-				while (client.isConnected()) {
-					Message message = (Message) objectInputStream.readObject();
-					System.out.println("Receive message: "+ message.toString());
-					Message byeMessage = new Message("Server","Bye!");
-					Message send = new Message("Server", "Okay!");
+				ClientConnection clientConnection = new ClientConnection(client, objectInputStream, objectOutputStream);
+				waitingClients.add(clientConnection);
+				
+				if(waitingClients.size()%2==0) {
+					ClientConnection cc1 = waitingClients.get(0);
+					ClientConnection cc2 = waitingClients.get(1);
 					
+					ChatHandler chatHandler = new ChatHandler(cc1, cc2);
+					Thread thread = new Thread(chatHandler);
+					thread.start();
 					
-					if (message.getMessage().equalsIgnoreCase("goodbye")) {		
-						objectOutputStream.writeObject(byeMessage);
-						
-						client.close();
-						break;
-					}
-					
-					objectOutputStream.writeObject(send);
-					
+					waitingClients.remove(cc1);
+					waitingClients.remove(cc2);
 				}
-			}
-			catch (IOException ex) {
+				
 				
 			}
-			catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+			catch (IOException ex) {			
 			
+			}
 		}
 		listener.close();
 	}

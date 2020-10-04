@@ -114,25 +114,20 @@ public class ClientGUI {
 				JOptionPane.showMessageDialog(this.frame, "Unable to send message.");
 			}	
 			
-			//Receive message from server
-			try {
-				Message received = (Message) this.ois.readObject();
-				this.chatListModel.addElement(received);
-				
-			} catch (ClassNotFoundException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 		});
-		
-		
-		
+				
 		sendTextPanel.add(textInputLabel,BorderLayout.NORTH);
 		sendTextPanel.add(textField, BorderLayout.CENTER);
 		sendTextPanel.add(sendButton, BorderLayout.EAST);
 		
 		panel.add(sendTextPanel, BorderLayout.SOUTH);
 		return panel;
+	}
+	
+	public void addMessage(String message) {
+		this.chatListModel.addElement(message);
+		
 	}
 	
 	private JPanel createButtonsPanel() {
@@ -158,6 +153,11 @@ public class ClientGUI {
 				
 				InputStream inputStream = socket.getInputStream();
 				this.ois = new ObjectInputStream(inputStream);
+				
+				ServerHandler serverHandler = new ServerHandler(socket, ois, this);
+				Thread thread = new Thread(serverHandler);
+				
+				thread.start();
 				
 				this.chatListModel.addElement("Connected");
 				disconnectButton.setEnabled(true);
