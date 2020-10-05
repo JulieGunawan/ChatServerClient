@@ -26,7 +26,8 @@ public class ServerHandler implements Runnable {
 	
 	@Override
 	public void run() {
-		while(socket.isConnected()) {
+		while(!socket.isClosed()) {
+		//while(socket.isConnected()) {
 			//Receive message from server
 			try {
 				Message received = (Message) this.ois.readObject();

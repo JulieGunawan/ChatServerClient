@@ -42,9 +42,9 @@ public class AppDriver {
 					Thread thread = new Thread(chatHandler1);
 					thread.start();
 					
-					ChatHandler chatHandler2 = new ChatHandler(cc2, cc1);
-					Thread thread2 = new Thread(chatHandler2);
-					thread2.start();
+					//ChatHandler chatHandler2 = new ChatHandler(cc2, cc1);
+					//Thread thread2 = new Thread(chatHandler2);
+					//thread2.start();
 					
 					waitingClients.remove(cc1);
 					waitingClients.remove(cc2);
